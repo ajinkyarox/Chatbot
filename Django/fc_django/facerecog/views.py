@@ -422,6 +422,9 @@ def mcresponse(request):
         if msg.lower()=="hi" or msg.lower()=="hello":
             voice=getTextToSpeech("Hello")
             response={'status':"Success",'respmsg':"Hello",'respvoice':voice}
+        else:
+            voice = getTextToSpeech("Unable to understand you.Sorry.")
+            response = {'status': "Success", 'respmsg': "Hello", 'respvoice': voice}
     except Exception as e:
         print(str(e))
     print(response)
