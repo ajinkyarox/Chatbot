@@ -424,7 +424,7 @@ def mcresponse(request):
             response={'status':"Success",'respmsg':"Hello",'respvoice':voice}
         else:
             voice = getTextToSpeech("Unable to understand you.Sorry.")
-            response = {'status': "Success", 'respmsg': "Hello", 'respvoice': voice}
+            response = {'status': "Success", 'respmsg': "Unable to understand you.Sorry.", 'respvoice': voice}
     except Exception as e:
         print(str(e))
     print(response)
