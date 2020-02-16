@@ -411,8 +411,26 @@ def put_text(test_img,text,x,y):
     cv2.putText(test_img,text,(x,y),cv2.FONT_HERSHEY_DUPLEX,2,(255,0,0),4)
 
 @csrf_exempt
-def getTextToSpeech(request):
-    response=''
+def mcresponse(request):
+    response={'status':"Failure",'respmsg':"",'respvoice':""}
+    try:
+
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
+
+        msg=body_data['msg']
+        if msg.lower()=="hi" or msg.lower()=="hello":
+            voice=getTextToSpeech("Hello")
+            response={'status':"Success",'respmsg':"Hello",'respvoice':voice}
+    except Exception as e:
+        print(str(e))
+    print(response)
+    return JsonResponse(response,safe=False)
+
+
+@csrf_exempt
+def getTextToSpeech(msg):
+    base64_encoded=''
     try:
         pythoncom.CoInitialize()
 
@@ -420,7 +438,7 @@ def getTextToSpeech(request):
             os.mkdir(os.getcwd() + os.path.sep + "Temp" )
         speak = wincl.Dispatch("SAPI.SpVoice")
 
-        tts = gTTS(text="This is the pc speaking", lang='en')
+        tts = gTTS(text=msg, lang='en')
 
         tts.save(os.getcwd() + os.path.sep + "Temp" + os.path.sep + "pcvoice.mp3")
         print("TTT")
@@ -430,8 +448,7 @@ def getTextToSpeech(request):
         print("XXX")
         base64_encoded = base64.b64encode(data).decode('UTF-8')
         print("CCC")
-        response = {'status': 'Success',
-                    'responseObject': base64_encoded}
+
         os.remove(os.getcwd()+os.path.sep+"Temp"+os.path.sep+"pcvoice.mp3")
         os.rmdir(os.getcwd()+os.path.sep+"Temp")
     except Exception as e:
@@ -442,4 +459,4 @@ def getTextToSpeech(request):
             os.rmdir(os.getcwd() + os.path.sep + "Temp")
         print(str(e))
 
-    return JsonResponse(response,safe=False)
+    return base64_encoded

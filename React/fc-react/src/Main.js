@@ -21,28 +21,73 @@ const AttLayout = () =>(
        
       </div>
 )
+var tmp=[]
+        tmp.push({
+          author: 'them',
+          type: 'text',
+          data: { text:'Hello' }
+        })
 class Main extends Component{
     constructor(props){
         super(props)
         this.state={
             empflag:false,
             attflag:false,
-            messageList: []
+            messageList:[/*{
+              author: 'them',
+              type: 'text',
+              data: { text:'Hello' }
+            },*/]
+           
         }
+
+             
+     
     }
 
     _onMessageWasSent(message) {
         console.log(message.data.text)
-        
+        let tempmsg=''
         let tempArr = [...this.state.messageList,message];
-     tempArr.push({
-        author: 'them',
-        type: 'text',
-        data: { text:'Hello' }
-      })
-     this.setState({
-        messageList: tempArr
-    });
+        fetch('http://localhost:8000/mcresponse', {
+        method: 'POST',
+        body: JSON.stringify({
+          msg: message.data.text,
+          
+          
+          
+        })
+        
+      }).then((response) => {
+          return response.json() // << This is the problem
+       })
+       .then((responseData) => { // responseData = undefined
+           
+           if(responseData.status==="Success"){
+            tempmsg=responseData.respmsg
+
+             
+             tempArr.push({
+              author: 'them',
+              type: 'text',
+              data: { text:tempmsg }
+            })
+           this.setState({
+              messageList: tempArr
+          });
+
+          var snd = new Audio("data:audio/mp3;base64," + responseData.respvoice);
+snd.play();
+           }
+           else{
+
+
+           }
+          
+           return responseData;
+       })
+     
+
         
       }
 
@@ -84,17 +129,30 @@ logout(e)
    history.push('/')
    
 }
-render(){
 
-    
+render(){
+ 
+  
     return(
     <div align="center">
         <div align="right">
             <button onClick={(e)=>{this.logout(e)}}>Logout</button>
         </div>
-      <Launcher
+
+        <Container>
+      <Navbar bg="primary" variant="dark">
+    
+    <Nav className="mr-auto">
+      <Nav.Link onClick={(e)=>{this.changeEmpNavFlag(e)}}>Employee List</Nav.Link>&nbsp; &nbsp;
+      <Nav.Link onClick={(e)=>{this.changeAttNavFlag(e)}}>Attendance List</Nav.Link>
+    </Nav>
+    </Navbar>
+    </Container>
+
+      <Launcher 
+     
         agentProfile={{
-          teamName: 'react-chat-window',
+          teamName: 'ChatBot',
           imageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png'
         }}
         onMessageWasSent={this._onMessageWasSent.bind(this)}

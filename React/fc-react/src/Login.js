@@ -70,6 +70,9 @@ window.location.reload(true);
          console.log(err);
      })
     }
+    else{
+      alert("Enter all the fields")
+    }
     
 }
 

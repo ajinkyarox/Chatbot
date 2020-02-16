@@ -1,6 +1,6 @@
 # pages/urls.py
 from django.urls import path
-from .views import getEmpDetails,addEmployee,updateEmployee,deleteEmployee,savePhoto,markAttendance,getAttendance,getMonthlyReport,addLoginCredentials,login,getTextToSpeech
+from .views import getEmpDetails,addEmployee,updateEmployee,deleteEmployee,savePhoto,markAttendance,getAttendance,getMonthlyReport,addLoginCredentials,mcresponse,login,getTextToSpeech
 from facerecog import views
 
 urlpatterns = [
@@ -15,7 +15,8 @@ urlpatterns = [
     path('getMonthlyReport',getMonthlyReport,name='getMonthlyReport'),
     path('login',login,name='login'),
     path('addLoginCredentials',addLoginCredentials,name='addLoginCredentials'),
-    path('getTextToSpeech', getTextToSpeech, name='getTextToSpeech')
+    path('getTextToSpeech', getTextToSpeech, name='getTextToSpeech'),
+    path('mcresponse', mcresponse, name='mcresponse')
 
 ]
 
