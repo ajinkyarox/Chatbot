@@ -49,6 +49,9 @@ class Main extends Component{
         console.log(message.data.text)
         let tempmsg=''
         let tempArr = [...this.state.messageList,message];
+        this.setState({
+          messageList: tempArr
+      });
         fetch('http://localhost:8000/mcresponse', {
         method: 'POST',
         body: JSON.stringify({

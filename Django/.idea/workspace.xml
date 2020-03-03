@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e3818b7-b9e0-41eb-ba06-bdbf196b925c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fc_django/facerecog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fc_django/facerecog/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../React/fc-react/src/Main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../React/fc-react/src/Main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +33,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\Project\Chatbot for University Admission Process\Django\fc_django" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\Project\Chatbot for University Admission Process\Django" />
       <recent name="G:\Project\FaceRecog\Django\fc_django\facerecog" />
       <recent name="G:\Project\FaceRecog\Django\fc_django\fc_django" />
     </key>
@@ -128,10 +134,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="409" y="4" key="#videoTester/0.0.1366.728@0.0.1366.728" timestamp="1579428352952" />
-    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1577364485770">
+    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1583056347674">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1577364485770" />
+    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1583056347674" />
     <state width="1344" height="174" key="GridCell.Tab.0.bottom" timestamp="1579436118769">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
