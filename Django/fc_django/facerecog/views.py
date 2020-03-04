@@ -438,13 +438,11 @@ def mcresponse(request):
             response = {'status': "Success", 'respmsg': "Unable to understand you.Sorry.", 'respvoice': voice}
         elif os.path.exists(os.getcwd()+os.path.sep+"intents.json"):
             print("EXISTS")
-            data=''
-            with open(os.getcwd()+os.path.sep+"intents.json") as f:
-                data = json.load(f)
+
             print("uuuuu")
             if os.path.exists(os.getcwd()+os.path.sep+"data.pickle")==False:
                 dataPickle()
-
+            print("ffff")
             with open("data.pickle", "rb") as f:
                 words, labels, training, output = pickle.load(f)
             tensorflow.reset_default_graph()
@@ -459,7 +457,7 @@ def mcresponse(request):
 
             model.load("model.tflearn")
             results = model.predict([bag_of_words(msg, words)])
-            print(results)
+
             num = results[0][0] * 10
             if num > 1:
                 voice = getTextToSpeech("Unable to understand you.Sorry.")
@@ -470,15 +468,18 @@ def mcresponse(request):
                 results_index = numpy.argmax(results)
 
                 tag = labels[results_index]
-                print(tag)
-                for tg in data["intents"]:
-                    if tg['tag'] == tag:
-                        resp = tg['responses']
-                        respf=random.choice(resp)
-                        voice = getTextToSpeech(respf)
-                        response = {'status': "Success", 'respmsg': respf,
-                                    'respvoice': voice}
-                        break
+
+                with open(os.getcwd() + os.path.sep + "intents.json") as f:
+                    data = json.load(f)
+                    for tg in data["intents"]:
+                        if tg['tag'] == tag:
+                            resp = tg['responses']
+                            respf=random.choice(resp)
+                            voice = getTextToSpeech(respf)
+                            response = {'status': "Success", 'respmsg': respf,
+                                        'respvoice': voice}
+                            print(tg['context_set'])
+                            break
         else:
             voice = getTextToSpeech("Unable to understand you.Sorry.")
             response = {'status': "Success", 'respmsg': "Unable to understand you.Sorry.", 'respvoice': voice}
@@ -494,15 +495,17 @@ def dataPickle():
     docs_x = []
     docs_y = []
 
-    for intent in data["intents"]:
-        for pattern in intent["patterns"]:
-            wrds = nltk.word_tokenize(pattern)
-            words.extend(wrds)
-            docs_x.append(wrds)
-            docs_y.append(intent["tag"])
+    with open(os.getcwd() + os.path.sep + "intents.json") as f:
+        data = json.load(f)
+        for intent in data["intents"]:
+            for pattern in intent["patterns"]:
+                wrds = nltk.word_tokenize(pattern)
+                words.extend(wrds)
+                docs_x.append(wrds)
+                docs_y.append(intent["tag"])
 
-        if intent["tag"] not in labels:
-            labels.append(intent["tag"])
+            if intent["tag"] not in labels:
+                labels.append(intent["tag"])
 
     words = [stemmer.stem(w.lower()) for w in words if w != "?"]
     words = sorted(list(set(words)))
