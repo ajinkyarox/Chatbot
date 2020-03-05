@@ -27,3 +27,10 @@ class LoginCredentials(models.Model):
 
     class Meta:
         db_table = "LoginCredentials"
+
+class CollegeDetails(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=256)
+    address = models.CharField(max_length=256)
+    class Meta:
+        db_table = "CollegeDetails"

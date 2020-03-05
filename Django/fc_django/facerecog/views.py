@@ -2,7 +2,7 @@
 import os
 import base64
 from django.http import HttpResponse
-from .models import EmpDetails,Attendance,LoginCredentials
+from .models import EmpDetails,Attendance,LoginCredentials,CollegeDetails
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict
@@ -458,6 +458,7 @@ def mcresponse(request):
             model.load("model.tflearn")
             results = model.predict([bag_of_words(msg, words)])
 
+
             num = results[0][0] * 10
             if num > 1:
                 voice = getTextToSpeech("Unable to understand you.Sorry.")
@@ -475,10 +476,24 @@ def mcresponse(request):
                         if tg['tag'] == tag:
                             resp = tg['responses']
                             respf=random.choice(resp)
+                            if tg['context_set']!=None and tg['context_set'].strip()!='':
+
+                                if tg['context_set']=='college_name':
+                                    print(tg['context_set'])
+                                    #EmpDetails.objects.get(id=body_data['id'])
+                                    cname=uniqueWords(msg,words)
+                                    listOfColleges=list(CollegeDetails.objects.values())
+
+                                    for i in listOfColleges:
+                                        print(i)
+                                        if i['name'].lower().find(cname.lower()):
+                                            respf=i['name']+' is located in '+i['address']
+                                            break
+
                             voice = getTextToSpeech(respf)
                             response = {'status': "Success", 'respmsg': respf,
                                         'respvoice': voice}
-                            print(tg['context_set'])
+
                             break
         else:
             voice = getTextToSpeech("Unable to understand you.Sorry.")
@@ -564,6 +579,24 @@ def bag_of_words(s, words):
                 bag[i] = 1
 
     return numpy.array(bag)
+
+def uniqueWords(msg,words):
+    resword=''
+    bag = [0 for _ in range(len(words))]
+    s_words = nltk.word_tokenize(msg)
+    s_words = [stemmer.stem(word.lower()) for word in s_words]
+    allwords=msg.lower().split(" ")
+    for w in allwords:
+        cnt=0
+        for s in words:
+            if w!='a' and w!='of' and w!='and' and w!='engineering' and w!='research' and w!='college' and w!=s:
+                cnt=cnt+1
+        if cnt==len(words):
+            print(w)
+            resword= w
+    return resword
+
+
 
 
 @csrf_exempt
