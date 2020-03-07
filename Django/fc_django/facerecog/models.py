@@ -32,5 +32,13 @@ class CollegeDetails(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=256)
+    totalCourses = models.IntegerField()
     class Meta:
         db_table = "CollegeDetails"
+
+class Courses(models.Model):
+    id = models.AutoField(primary_key=True)
+    cid=models.IntegerField()
+    name = models.CharField(max_length=256)
+    class Meta:
+        db_table = "Courses"

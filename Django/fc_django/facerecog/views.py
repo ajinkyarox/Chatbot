@@ -2,7 +2,7 @@
 import os
 import base64
 from django.http import HttpResponse
-from .models import EmpDetails,Attendance,LoginCredentials,CollegeDetails
+from .models import EmpDetails,Attendance,LoginCredentials,CollegeDetails,Courses
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict
@@ -457,29 +457,35 @@ def mcresponse(request):
 
             model.load("model.tflearn")
             results = model.predict([bag_of_words(msg, words)])
-
+            print(results)
 
             num = results[0][0] * 10
-            if num > 1:
+            num2=results[0][1]*10
+            print(num2)
+            if num > 1 and num2>1:
                 voice = getTextToSpeech("Unable to understand you.Sorry.")
                 response = {'status': "Success", 'respmsg': "Unable to understand you.Sorry.", 'respvoice': voice}
             else:
 
 
                 results_index = numpy.argmax(results)
-
+                print(results_index)
                 tag = labels[results_index]
 
                 with open(os.getcwd() + os.path.sep + "intents.json") as f:
                     data = json.load(f)
-                    for tg in data["intents"]:
+
+                    for tg in data['intents']:
+
                         if tg['tag'] == tag:
+
                             resp = tg['responses']
-                            respf=random.choice(resp)
+                            respf=''
+                            print(respf)
                             if tg['context_set']!=None and tg['context_set'].strip()!='':
 
                                 if tg['context_set']=='college_name':
-                                    print(tg['context_set'])
+
                                     #EmpDetails.objects.get(id=body_data['id'])
                                     cname=uniqueWords(msg,words)
                                     listOfColleges=list(CollegeDetails.objects.values())
@@ -487,9 +493,26 @@ def mcresponse(request):
                                     for i in listOfColleges:
                                         print(i)
                                         if i['name'].lower().find(cname.lower()):
-                                            respf=i['name']+' is located in '+i['address']
+                                            c_id=i['id']
+                                            respf = i['name'] + ' is located in ' + i['address']
+                                            courses=[]
+                                            print(i['id'])
+                                            courses=Courses.objects.filter(cid=c_id)
+                                            if len(courses)>0:
+                                                respf = respf + ' and offers courses like '
+                                                cnt=0
+                                                for k in courses:
+                                                    cnt = cnt + 1
+                                                    if cnt==((len(courses))):
+                                                        respf=respf + ' & '+str(k.name)+'.'
+                                                    else:
+                                                        respf = respf + str(k.name) +', '
+
+
                                             break
 
+                            else:
+                                respf = random.choice(resp)
                             voice = getTextToSpeech(respf)
                             response = {'status': "Success", 'respmsg': respf,
                                         'respvoice': voice}

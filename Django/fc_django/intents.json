@@ -6,15 +6,17 @@
         },
         {"tag": "goodbye",
          "patterns": ["Bye", "See you later", "Goodbye"],
-         "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."]
+         "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."],
+          "context_set": ""
         },
         {"tag": "thanks",
          "patterns": ["Thanks", "Thank you", "That's helpful"],
-         "responses": ["Happy to help!", "Any time!", "My pleasure"]
+         "responses": ["Happy to help!", "Any time!", "My pleasure"],
+          "context_set": ""
         },
     {"tag": "information",
          "patterns": ["I want to know about", "I want to know regarding", "Could you give information about"],
-         "responses": ["Happy to help!", "Any time!", "My pleasure"],
+         "responses": "",
       "context_set": "college_name"
         }
    ]
