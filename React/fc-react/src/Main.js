@@ -48,6 +48,9 @@ class Main extends Component{
     _onMessageWasSent(message) {
         console.log(message.data.text)
         let tempmsg=''
+        var msgTemp=message.data.text;
+
+        
         let tempArr = [...this.state.messageList,message];
         this.setState({
           messageList: tempArr
@@ -55,7 +58,7 @@ class Main extends Component{
         fetch('http://localhost:8000/mcresponse', {
         method: 'POST',
         body: JSON.stringify({
-          msg: message.data.text,
+          msg: msgTemp.toLowerCase(),
           
           
           

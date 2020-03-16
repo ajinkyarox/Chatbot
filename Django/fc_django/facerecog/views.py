@@ -487,13 +487,15 @@ def mcresponse(request):
                                 if tg['context_set']=='college_name':
 
                                     #EmpDetails.objects.get(id=body_data['id'])
-                                    cname=uniqueWords(msg,words)
+                                    cname=uniqueWords(msg,words).lower()
                                     listOfColleges=list(CollegeDetails.objects.values())
-
+                                    cnt1=0
                                     for i in listOfColleges:
-                                        print(i)
-                                        if i['name'].lower().find(cname.lower()):
+
+                                        print(cname+" "+i['name'])
+                                        if is_part(i['name'],cname):
                                             c_id=i['id']
+                                            print("Found----"+cname)
                                             respf = i['name'] + ' is located in ' + i['address']
                                             courses=[]
                                             print(i['id'])
@@ -510,7 +512,20 @@ def mcresponse(request):
 
 
                                             break
-
+                                        else:
+                                            cnt1 = cnt1 + 1
+                                    cnt2=str(cnt1)
+                                    cnt3=str(len(listOfColleges))
+                                    flg1=(cnt3==cnt2)
+                                    print(str(flg1)+"====")
+                                    flg1=str(flg1)
+                                    print(flg1)
+                                    if flg1=="True":
+                                        print("yyyy")
+                                        voice = getTextToSpeech("Requested college details not found in the database. Sorry.")
+                                        respf="Requested college details not found in the database. Sorry."
+                                        response = {'status': "Success", 'respmsg': respf,
+                                                    'respvoice': voice}
                             else:
                                 respf = random.choice(resp)
                             voice = getTextToSpeech(respf)
@@ -526,6 +541,10 @@ def mcresponse(request):
 
     return JsonResponse(response,safe=False)
 
+
+
+def is_part(some_string, target):
+    return target in some_string
 
 def dataPickle():
     words = []
