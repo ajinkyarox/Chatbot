@@ -18,6 +18,12 @@
          "patterns": ["I want to know about college", "I want to know regarding college", "Could you give information about college"],
          "responses": "",
       "context_set": "college_name"
+        },
+  {"tag": "information2",
+         "patterns": ["What is the admission criteria for", "What is the percentage required to get admission", "I want to the admission criteria",
+         "I want to the percentage required to get admission","I wanted to about percentage required to get admission"],
+         "responses": "",
+      "context_set": "admissionCriteria"
         }
    ]
 }

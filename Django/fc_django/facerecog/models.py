@@ -33,6 +33,8 @@ class CollegeDetails(models.Model):
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=256)
     totalCourses = models.IntegerField()
+    admitCriteria=models.IntegerField()
+    shortForm=models.CharField(max_length=256)
     class Meta:
         db_table = "CollegeDetails"
 

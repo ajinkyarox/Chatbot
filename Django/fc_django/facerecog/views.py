@@ -478,7 +478,7 @@ def mcresponse(request):
                     for tg in data['intents']:
 
                         if tg['tag'] == tag:
-
+                            print(tg['tag'])
                             resp = tg['responses']
                             respf=''
                             print(respf)
@@ -493,7 +493,7 @@ def mcresponse(request):
                                     for i in listOfColleges:
 
                                         print(cname+" "+i['name'])
-                                        if is_part(i['name'],cname):
+                                        if is_part(i['name'],cname) or is_part(i['shortForm'],cname):
                                             c_id=i['id']
                                             print("Found----"+cname)
                                             respf = i['name'] + ' is located in ' + i['address']
@@ -524,6 +524,33 @@ def mcresponse(request):
                                         print("yyyy")
                                         voice = getTextToSpeech("Requested college details not found in the database. Sorry.")
                                         respf="Requested college details not found in the database. Sorry."
+                                        response = {'status': "Success", 'respmsg': respf,
+                                                    'respvoice': voice}
+                                elif tg['context_set']=='admissionCriteria':
+                                    print('Admission Criteria')
+                                    cname = uniqueWords(msg, words).lower()
+                                    listOfColleges = list(CollegeDetails.objects.values())
+                                    cnt1 = 0
+                                    for i in listOfColleges:
+                                        print(is_part(i['shortForm'], cname))
+                                        if is_part(i['name'], cname) or is_part(i['shortForm'], cname):
+                                            respf = 'The criteria to secure admission in '+i['name'] +' is '+' '+str(i['admitCriteria'])+'% in 12th grade (HSC).'
+                                            print(respf)
+                                            break
+                                        else:
+                                            cnt1=cnt1+1
+
+                                    cnt2 = str(cnt1)
+                                    cnt3 = str(len(listOfColleges))
+                                    flg1 = (cnt3 == cnt2)
+                                    print(str(flg1) + "====")
+                                    flg1 = str(flg1)
+                                    print(flg1)
+                                    if flg1 == "True":
+
+                                        voice = getTextToSpeech(
+                                            "Requested college details not found in the database. Sorry.")
+                                        respf = "Requested college details not found in the database. Sorry."
                                         response = {'status': "Success", 'respmsg': respf,
                                                     'respvoice': voice}
                             else:
@@ -632,7 +659,7 @@ def uniqueWords(msg,words):
         cnt=0
         for s in words:
             if w!='a' and w!='of' and w!='and' and w!='engineering' and w!='research' and w!='college' and w!=s and w!='institute'\
-                    and w!='technology':
+                    and w!='technology' and w!='admission' and w!='criteria' and 'what':
                 cnt=cnt+1
         if cnt==len(words):
             print(w)
