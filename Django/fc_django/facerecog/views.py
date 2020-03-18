@@ -688,7 +688,8 @@ def uniqueWords(msg,words):
         for s in words:
             if w!='a' and w!='of' and w!='and' and w!='engineering' and w!='research' and w!='college' and w!=s and w!='institute'\
                     and w!='technology' and w!='admission' and w!='criteria' and w!='what' and w!='for' and w!='regarding' and w!='fee'\
-                    and w!='fees' and w!='information' and w!='please' and w!='give':
+                    and w!='fees' and w!='information' and w!='please' and w!='give'  and w!='admitted' and w!='percentage'\
+                    and w!='required' and w!='in':
                 cnt=cnt+1
         if cnt==len(words):
             print(w)
