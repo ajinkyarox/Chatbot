@@ -24,6 +24,14 @@
          "I want to the percentage required to get admission","I wanted to about percentage required to get admission"],
          "responses": "",
       "context_set": "admissionCriteria"
+        },
+    {"tag": "information3",
+         "patterns": ["What is the fees for", "I want to know about total fees","Please tell me about the fees"
+         ,"Could you give information about the fees","What is the fee for single year",
+         "I would like to know about the fee for single year","I want to know the fee for single year",
+         "Could you give me information about the fee for one year","Please give me information regarding fee for"],
+         "responses": "",
+      "context_set": "fees"
         }
    ]
 }

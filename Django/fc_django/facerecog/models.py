@@ -35,6 +35,7 @@ class CollegeDetails(models.Model):
     totalCourses = models.IntegerField()
     admitCriteria=models.IntegerField()
     shortForm=models.CharField(max_length=256)
+    fees=models.IntegerField();
     class Meta:
         db_table = "CollegeDetails"
 
