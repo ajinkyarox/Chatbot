@@ -429,6 +429,7 @@ def mcresponse(request):
         body_data = json.loads(body_unicode)
 
         msg=body_data['msg']
+        msg=msg.replace('?','')
         if msg.lower()=="hi" or msg.lower()=="hello":
             voice=getTextToSpeech("Hello")
             response={'status':"Success",'respmsg':"Hello",'respvoice':voice}
@@ -489,98 +490,112 @@ def mcresponse(request):
                                     #EmpDetails.objects.get(id=body_data['id'])
                                     cname=uniqueWords(msg,words).lower()
                                     listOfColleges=list(CollegeDetails.objects.values())
+                                    college=None
+                                    try:
+                                        college=CollegeDetails.objects.filter(name=cname).first()
+                                        if college==None:
+                                            college=CollegeDetails.objects.filter(shortForm=cname).first()
+                                    except Exception as e:
+                                        print(str(e))
+                                    print(college)
                                     cnt1=0
-                                    for i in listOfColleges:
-
-                                        print(cname+" "+i['name'])
-                                        if is_part(i['name'],cname) or is_part(i['shortForm'],cname):
-                                            c_id=i['id']
-                                            print("Found----"+cname)
-                                            respf = i['name'] + ' is located in ' + i['address']
-                                            courses=[]
-                                            print(i['id'])
-                                            courses=Courses.objects.filter(cid=c_id)
-                                            if len(courses)>0:
-                                                respf = respf + ' and offers courses like '
-                                                cnt=0
-                                                for k in courses:
-                                                    cnt = cnt + 1
-                                                    if cnt==((len(courses))):
-                                                        respf=respf + ' & '+str(k.name)+'.'
-                                                    else:
-                                                        respf = respf + str(k.name) +', '
 
 
-                                            break
-                                        else:
-                                            cnt1 = cnt1 + 1
-                                    cnt2=str(cnt1)
-                                    cnt3=str(len(listOfColleges))
-                                    flg1=(cnt3==cnt2)
-                                    print(str(flg1)+"====")
-                                    flg1=str(flg1)
-                                    print(flg1)
-                                    if flg1=="True":
-                                        print("yyyy")
-                                        voice = getTextToSpeech("Requested college details not found in the database. Sorry.")
-                                        respf="Requested college details not found in the database. Sorry."
+
+                                    if college!=None:
+                                        c_id=college.id
+                                        print("Found----"+cname)
+                                        respf = college.name + ' is located in ' + college.address
+                                        courses=[]
+                                        print(respf)
+                                        courses=Courses.objects.filter(cid=c_id)
+                                        if len(courses)>0:
+                                            respf = respf + ' and offers courses like '
+                                            cnt=0
+                                            for k in courses:
+                                                cnt = cnt + 1
+                                                if cnt==((len(courses))):
+                                                    respf=respf + ' & '+str(k.name)+'.'
+                                                else:
+                                                    respf = respf + str(k.name) +', '
+
+                                        voice = getTextToSpeech(respf)
                                         response = {'status': "Success", 'respmsg': respf,
                                                     'respvoice': voice}
+                                        break
+                                    else:
+                                        print("yyyy")
+                                        voice = getTextToSpeech(
+                                            "Requested college details not found in the database. Sorry.")
+                                        respf = "Requested college details not found in the database. Sorry."
+                                        response = {'status': "Success", 'respmsg': respf,
+                                                    'respvoice': voice}
+                                    break
                                 elif tg['context_set']=='admissionCriteria':
                                     print('Admission Criteria')
                                     cname = uniqueWords(msg, words).lower()
-                                    listOfColleges = list(CollegeDetails.objects.values())
+                                    college = None
+                                    try:
+                                        college=CollegeDetails.objects.filter(name=cname).first()
+                                        if college==None:
+                                            college=CollegeDetails.objects.filter(shortForm=cname).first()
+                                    except Exception as e:
+                                        print(str(e))
+                                    print(college)
                                     cnt1 = 0
-                                    for i in listOfColleges:
-                                        print(is_part(i['shortForm'], cname))
-                                        if is_part(i['name'], cname) or is_part(i['shortForm'], cname):
-                                            respf = 'The criteria to secure admission in '+i['name'] +' is '+' '+str(i['admitCriteria'])+'% in 12th grade (HSC).'
-                                            print(respf)
-                                            break
-                                        else:
-                                            cnt1=cnt1+1
 
-                                    cnt2 = str(cnt1)
-                                    cnt3 = str(len(listOfColleges))
-                                    flg1 = (cnt3 == cnt2)
-                                    print(str(flg1) + "====")
-                                    flg1 = str(flg1)
-                                    print(flg1)
-                                    if flg1 == "True":
 
+                                    if college!=None:
+                                        respf = 'The criteria to secure admission in '+college.name +' is '+' '+str(college.admitCriteria)+'% in 12th grade (HSC).'
+                                        print(respf)
+                                        voice = getTextToSpeech(respf)
+                                        response = {'status': "Success", 'respmsg': respf,
+                                                    'respvoice': voice}
+                                        break
+                                    else:
                                         voice = getTextToSpeech(
                                             "Requested college details not found in the database. Sorry.")
                                         respf = "Requested college details not found in the database. Sorry."
                                         response = {'status': "Success", 'respmsg': respf,
                                                     'respvoice': voice}
+
+                                        break
+
+
                                 elif tg['context_set']=='fees':
                                     print('FEES')
                                     cname = uniqueWords(msg, words).lower()
-                                    listOfColleges = list(CollegeDetails.objects.values())
-                                    cnt1 = 0
-                                    for i in listOfColleges:
-                                        print(is_part(i['shortForm'], cname))
-                                        if is_part(i['name'], cname) or is_part(i['shortForm'], cname):
-                                            print("Is Part for fees "+i['name'] + ' '+i['fees'])
-                                            respf = 'The fee for '+i['name']+' is '+i['fees']+' Rupees per year.'
-                                            print(respf)
-                                            break
-                                        else:
-                                            cnt1=cnt1+1
+                                    college = None
+                                    try:
+                                        print(cname)
+                                        college=CollegeDetails.objects.filter(name=cname).first()
+                                        if college==None:
+                                            college=CollegeDetails.objects.filter(shortForm=cname).first()
+                                    except Exception as e:
+                                        print(str(e))
+                                    print(college)
 
-                                    cnt2 = str(cnt1)
-                                    cnt3 = str(len(listOfColleges))
-                                    flg1 = (cnt3 == cnt2)
-                                    print(str(flg1) + "====")
-                                    flg1 = str(flg1)
-                                    print(flg1)
-                                    if flg1 == "True":
 
+
+                                    if college!=None:
+                                        print("Is Part for fees "+college.name + ' '+college.fees)
+                                        respf = 'The fee for '+college.name+' is '+college.fees+' Rupees per year.'
+                                        print(respf)
+                                        voice = getTextToSpeech(respf)
+                                        response = {'status': "Success", 'respmsg': respf,
+                                                    'respvoice': voice}
+                                        break
+
+                                    else:
                                         voice = getTextToSpeech(
                                             "Requested college details not found in the database. Sorry.")
                                         respf = "Requested college details not found in the database. Sorry."
                                         response = {'status': "Success", 'respmsg': respf,
                                                     'respvoice': voice}
+                                        break
+
+
+
                             else:
                                 respf = random.choice(resp)
                             voice = getTextToSpeech(respf)
@@ -689,11 +704,12 @@ def uniqueWords(msg,words):
             if w!='a' and w!='of' and w!='and' and w!='engineering' and w!='research' and w!='college' and w!=s and w!='institute'\
                     and w!='technology' and w!='admission' and w!='criteria' and w!='what' and w!='for' and w!='regarding' and w!='fee'\
                     and w!='fees' and w!='information' and w!='please' and w!='give'  and w!='admitted' and w!='percentage'\
-                    and w!='required' and w!='in':
+                    and w!='required' and w!='in' and w!='college' and w!=' ' and w.strip()!='':
                 cnt=cnt+1
         if cnt==len(words):
             print(w)
             resword= w
+    print(resword)
     return resword
 
 

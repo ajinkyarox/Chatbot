@@ -15,7 +15,8 @@
           "context_set": ""
         },
     {"tag": "information1",
-         "patterns": ["I want to know about college", "I want to know regarding college", "Could you give information about college"],
+         "patterns": ["I want to know about college", "I want to know regarding college", "Could you give information about college","I want information regarding college","I would like to know about college","I would like to know regarding college","Could you tell me about college",
+         "Could you tell me regarding college"],
          "responses": "",
       "context_set": "college_name"
         },
@@ -26,10 +27,10 @@
       "context_set": "admissionCriteria"
         },
     {"tag": "information3",
-         "patterns": ["What is the fees for", "I want to know about total fees","Please tell me about the fees"
-         ,"Could you give information about the fees","What is the fee for single year",
-         "I would like to know about the fee for single year","I want to know the fee for single year",
-         "Could you give me information about the fee for one year","Please give me information regarding fee for"],
+         "patterns": ["What is the fees for college", "I want to know about total fees for college","Please tell me about the fees for college"
+         ,"Could you give information about the fees for college","What is the fee for single year for college",
+         "I would like to know about the fee for single year for college","I want to know the fee for single year for college",
+         "Could you give me information about the fee for one year at college","Please give me information regarding fee for college"],
          "responses": "",
       "context_set": "fees"
         }
