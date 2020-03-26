@@ -593,6 +593,44 @@ def mcresponse(request):
                                         response = {'status': "Success", 'respmsg': respf,
                                                     'respvoice': voice}
                                         break
+                                elif tg['context_set']=='type':
+                                    print('TYPE')
+                                    cname = uniqueWords2(msg, words).lower()
+                                    list1 = None
+                                    print(cname)
+                                    try:
+
+                                       list1=CollegeDetails.objects.filter(typeOfClg=cname)
+                                    except Exception as e:
+                                        print(str(e))
+                                    print(list1)
+
+
+
+                                    if list1!=None:
+                                        respf='The '+cname+' based colleges in Savitribai Phule Pune University are as follows-'
+                                        tmpcnt=0
+                                        print(len(list1)!='0')
+                                        if len(list1)!='0':
+                                            for temp in list1:
+                                                tmpcnt=tmpcnt+1
+
+                                                respf=respf+' '+str(tmpcnt)+') '+temp.name+'. '
+                                        else:
+                                            respf='There are no colleges of requested type. Sorry.'
+                                        print(respf)
+                                        voice = getTextToSpeech(respf)
+                                        response = {'status': "Success", 'respmsg': respf,
+                                                    'respvoice': voice}
+                                        break
+
+                                    else:
+                                        voice = getTextToSpeech(
+                                            "Requested college details not found in the database. Sorry.")
+                                        respf = "Requested college details not found in the database. Sorry."
+                                        response = {'status': "Success", 'respmsg': respf,
+                                                    'respvoice': voice}
+                                        break
 
 
 
@@ -704,7 +742,9 @@ def uniqueWords(msg,words):
             if w!='a' and w!='of' and w!='and' and w!='engineering' and w!='research' and w!='college' and w!=s and w!='institute'\
                     and w!='technology' and w!='admission' and w!='criteria' and w!='what' and w!='for' and w!='regarding' and w!='fee'\
                     and w!='fees' and w!='information' and w!='please' and w!='give'  and w!='admitted' and w!='percentage'\
-                    and w!='required' and w!='in' and w!='college' and w!=' ' and w.strip()!='':
+                    and w!='required' and w!='in' and w!='college' and w!=' ' and w.strip()!='' and w!='college' and w!='colleges'\
+                    and w!='aegis' and w!='me' and w!='you' and w!='share' and w!='all' and w!='list' and w!='of' and w!='the'\
+                    and w!='fall' and w!='falls' and w!='does' and w!='offer' and w!='at' and w!='available' and w!='opt' and w!='for':
                 cnt=cnt+1
         if cnt==len(words):
             print(w)
@@ -712,6 +752,27 @@ def uniqueWords(msg,words):
     print(resword)
     return resword
 
+def uniqueWords2(msg,words):
+    resword=''
+    bag = [0 for _ in range(len(words))]
+    s_words = nltk.word_tokenize(msg)
+    s_words = [stemmer.stem(word.lower()) for word in s_words]
+    allwords=msg.lower().split(" ")
+    for w in allwords:
+        cnt=0
+        for s in words:
+            if w!='a' and w!='of' and w!='and' and w!='research' and w!='college' and w!=s and w!='institute'\
+                    and w!='technology' and w!='admission' and w!='criteria' and w!='what' and w!='for' and w!='regarding' and w!='fee'\
+                    and w!='fees' and w!='information' and w!='please' and w!='give'  and w!='admitted' and w!='percentage'\
+                    and w!='required' and w!='in' and w!='college' and w!=' ' and w.strip()!='' and w!='college' and w!='colleges'\
+                    and w!='aegis' and w!='me' and w!='you' and w!='share' and w!='all' and w!='list' and w!='of' and w!='the'\
+                    and w!='fall' and w!='falls':
+                cnt=cnt+1
+        if cnt==len(words):
+            print(w)
+            resword= w
+    print(resword)
+    return resword
 
 
 

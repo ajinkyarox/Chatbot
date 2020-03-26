@@ -16,7 +16,7 @@
         },
     {"tag": "information1",
          "patterns": ["I want to know about college", "I want to know regarding college", "Could you give information about college","I want information regarding college","I would like to know about college","I would like to know regarding college","Could you tell me about college",
-         "Could you tell me regarding college"],
+         "Could you tell me regarding college","what courses are available at","what courses can one opt for at","could you give me list of courses available at"],
          "responses": "",
       "context_set": "college_name"
         },
@@ -33,6 +33,12 @@
          "Could you give me information about the fee for one year at college","Please give me information regarding fee for college"],
          "responses": "",
       "context_set": "fees"
+        },
+  {"tag": "information4",
+         "patterns": ["give me the list of colleges","list down all the  colleges","tell me names of all  colleges that fall under","colleges that come under the aegis of"
+         ,"could you share with me the list of all colleges"],
+         "responses": "",
+      "context_set": "type"
         }
    ]
 }
