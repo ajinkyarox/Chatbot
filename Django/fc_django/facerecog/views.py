@@ -248,6 +248,11 @@ def getAttendance(request):
 
     return JsonResponse(data, safe=False)
 
+def getCollegeDetails(request):
+    data = list(CollegeDetails.objects.values())
+    print(data)
+
+    return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def getMonthlyReport(request):
