@@ -1,78 +1,188 @@
 import CollegeDetails from './CollegeDetails';
-import React,{ Component } from  'react';
+import React, { Component } from 'react';
+import Popup from "reactjs-popup";
 
 
 
 
-const  collegeDetails  =  new  CollegeDetails();
+const collegeDetails = new CollegeDetails();
 
-  
-class CollegeList extends Component{
 
-constructor(props){
-    super(props)
-    this.state = {
-        collegeDetails:[],
-        
-        
-    };
+class CollegeList extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            collegeDetails: [],
+            showPopup: false,
+name:'',
+address:'',
+shortForm:'',
+admitCriteria:'',
+fees:'',
+typeOfClg:''
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleNameChange=this.handleNameChange.bind(this);
+        this.handleAddressChange=this.handleAddressChange.bind(this);
+        this.handleAdmitCriteriaChange=this.handleAdmitCriteriaChange.bind(this);
+        this.handleFeesChange=this.handleFeesChange.bind(this);
+        this.handleShortFormChange=this.handleShortFormChange.bind(this);
+        this.handleTypeChange=this.handleTypeChange.bind(this);
+    }
+
+
+
+
+    componentDidMount() {
+        var self = this;
+
+        collegeDetails.getCollegeDetails().then(function (result) {
+
+            self.setState({ collegeDetails: result })
+
+        });
+
+
+
+
+    }
+    togglePopup() {
+        this.setState({
+            showPopup: false
+        });
+    }
+
+    handleNameChange(event){
+        this.setState({name: event.target.value }); 
+    }
+handleAddressChange(event){
+    this.setState({address: event.target.value }); 
+}
+handleShortFormChange(event){
+    this.setState({shortForm: event.target.value }); 
+}
+handleAdmitCriteriaChange(event){
+    this.setState({admitCriteria: event.target.value }); 
+}
+handleFeesChange(event){
+    this.setState({fees: event.target.value }); 
+}
+handleTypeChange(event){
+    this.setState({typeOfClg: event.target.value }); 
 }
 
-
-
-
-componentDidMount() {
-    var  self  =  this;
+handleSubmit(event) {
+    console.log(this.state.name)
     
-    collegeDetails.getCollegeDetails().then(function (result) {
-            
-        self.setState({ collegeDetails:  result})
+   var body1= JSON.stringify({
+        name: this.state.name,
+        address: this.state.address,
+        shortForm:this.state.shortForm,
+        admitCriteria:this.state.admitCriteria,
+        fees:this.state.fees,
+        typeOfClg:this.state.typeOfClg
+      })  
+    console.log("POSTING"+body1)
+    fetch('http://localhost:8000/addCollege', {
+  method: 'POST',
+  body: body1  
+}).then((response) => {
+    return response.json() // << This is the problem
+ })
+ .then((responseData) => { // responseData = undefined
+     alert(responseData.status);
+     window.location.reload(true);
+     return responseData;
+ })
+.catch(function(err) {
+   console.log(err);
+})
+
+
+// 
+  }
+
+
+
+    render() {
+
+        return (
+            <div align="center">
+                <br></br>
+                <Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Add Employee</button>} position="left center">
+                    <div>
+                                                           Name:
+                                                           <br></br>
+                                            <input type="text" value={this.state.name} onChange={(e)=>this.handleNameChange(e) } />
+
+                                            Address:
         
-    });
-     
+                                    <input type="text" value={this.state.address} onChange={(e)=>this.handleAddressChange(e) } />
+                               
+                                    Shortform:
+                                          <input type="text" value={this.state.shortForm} onChange={(e)=>this.handleShortFormChange(e) } />
+                                          <br></br>
+      
+                                    Admit Criteria:
+                                    <br></br>
+                                    <input type="text" value={this.state.admitCriteria} onChange={(e)=>this.handleAdmitCriteriaChange(e) } />
+                                    <br></br>
+                                    Fees:
+                                    <br></br>
+                                    <input type="text" value={this.state.fees}  onChange={(e)=>this.handleFeesChange(e) } />
+                                    <br></br>
+                                    Type:
+                                    <br></br>
+                                    <input type="text" value={this.state.typeOfClg} onChange={(e)=>this.handleTypeChange(e) } />
     
-     
-
-}
-render(){
+<br></br>
+<br></br>
     
-    return(
-    <div align="center">
-         
-        <table  className="table">
-        <thead  key="thead">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Shortform</th>
-                <th>Admit Criteria</th>
-                <th>Fees</th>
-                <th>Type</th>
-            </tr>
-            </thead>
-            <tbody>
-
-                {this.state.collegeDetails.map(c=>
-                <tr key={c.id}>
-                    <td>{c.id}</td>
-                    <td>{c.name}</td>
-                    <td>{c.address}</td>
-                    <td>{c.shortForm}</td>
-                    <td>{c.admitCriteria}</td>
-                    <td>{c.fees}</td>
-                    <td>{c.typeOfClg}</td>
+                                    <button onClick={this.handleSubmit}>Add</button>
+    
+                                    
+    
                     
-                </tr>
+                                    </div>
+                </Popup>
+                <br></br>
+                <br></br>
 
-                )}
-            </tbody>
-        </table>
+                <table className="table">
+                    <thead key="thead">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Shortform</th>
+                            <th>Admit Criteria</th>
+                            <th>Fees</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-    </div>);
+                        {this.state.collegeDetails.map(c =>
+                            <tr key={c.id}>
+                                <td>{c.id}</td>
+                                <td>{c.name}</td>
+                                <td>{c.address}</td>
+                                <td>{c.shortForm}</td>
+                                <td>{c.admitCriteria}</td>
+                                <td>{c.fees}</td>
+                                <td>{c.typeOfClg}</td>
+
+                            </tr>
+
+                        )}
+                    </tbody>
+                </table>
+
+            </div>);
+
+    }
+
 
 }
-
-
-}
-export  default  CollegeList;
+export default CollegeList;

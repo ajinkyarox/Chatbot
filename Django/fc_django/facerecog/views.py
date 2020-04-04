@@ -69,6 +69,41 @@ def addEmployee(request):
         response={'status':'Failure','responseObject':None}
     return JsonResponse(response, safe=False)
 
+
+@csrf_exempt
+def addCollege(request):
+    response = {'status': 'Failure', 'responseObject': None}
+    newclg = CollegeDetails()
+
+    if request.method == "POST":
+
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
+
+
+        newclg.name=body_data['name']
+        newclg.address = body_data['address']
+        newclg.admitCriteria=body_data['admitCriteria']
+        newclg.fees=body_data['fees']
+        newclg.shortForm=body_data['shortForm']
+        newclg.typeOfClg=body_data['typeOfClg']
+        if CollegeDetails.objects.filter(name=body_data['name'],shortForm=body_data['shortForm']).first()!=None:
+            print("Duplicate")
+            newclg=None
+            response = {'status': 'Failure', 'responseObject': newemp}
+        elif body_data['name'].strip()!="" and body_data['shortForm'].strip()!="":
+
+            newclg.save()
+            newclg=CollegeDetails.objects.filter(name=body_data['name'],shortForm=body_data['shortForm']).first()
+            print(newclg.id)
+
+            response={'status':'Success','responseObject':{'id':newclg.id,'name':newclg.name,'shortForm':newclg.shortForm}}
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+    else:
+        response={'status':'Failure','responseObject':None}
+    return JsonResponse(response, safe=False)
+
 @csrf_exempt
 def updateEmployee(request):
     response = ''
@@ -771,7 +806,7 @@ def uniqueWords2(msg,words):
                     and w!='fees' and w!='information' and w!='please' and w!='give'  and w!='admitted' and w!='percentage'\
                     and w!='required' and w!='in' and w!='college' and w!=' ' and w.strip()!='' and w!='college' and w!='colleges'\
                     and w!='aegis' and w!='me' and w!='you' and w!='share' and w!='all' and w!='list' and w!='of' and w!='the'\
-                    and w!='fall' and w!='falls':
+                    and w!='fall' and w!='falls' and w!='based':
                 cnt=cnt+1
         if cnt==len(words):
             print(w)
