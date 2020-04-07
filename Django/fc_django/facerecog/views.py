@@ -81,12 +81,12 @@ def addCollege(request):
         body_data = json.loads(body_unicode)
 
 
-        newclg.name=body_data['name']
-        newclg.address = body_data['address']
+        newclg.name=body_data['name'].lower()
+        newclg.address = body_data['address'].lower()
         newclg.admitCriteria=body_data['admitCriteria']
         newclg.fees=body_data['fees']
-        newclg.shortForm=body_data['shortForm']
-        newclg.typeOfClg=body_data['typeOfClg']
+        newclg.shortForm=body_data['shortForm'].lower()
+        newclg.typeOfClg=body_data['typeOfClg'].lower()
         if CollegeDetails.objects.filter(name=body_data['name'],shortForm=body_data['shortForm']).first()!=None:
             print("Duplicate")
             newclg=None
@@ -102,6 +102,69 @@ def addCollege(request):
             response = {'status': 'Failure', 'responseObject': None}
     else:
         response={'status':'Failure','responseObject':None}
+    return JsonResponse(response, safe=False)
+
+@csrf_exempt
+def updateCollege(request):
+    response = ''
+    newclg = CollegeDetails()
+    try:
+        if request.method == "PUT":
+            response = 'Success'
+            body_unicode = request.body.decode('utf-8')
+            body_data = json.loads(body_unicode)
+
+
+            if CollegeDetails.objects.get(id=body_data['id']) != None and body_data['name'].strip()!="":
+                #newemp.firstname = body_data['firstname']
+                #newemp.lastname = body_data['lastname']
+                newclg=CollegeDetails.objects.filter(id=body_data['id']).update(name=body_data['name'].lower(),address=body_data['address'].lower(),
+                                                                                admitCriteria=body_data['admitCriteria'].lower(),shortForm=body_data['shortForm'].lower(),
+                                                                                fees=body_data['fees'],typeOfClg=body_data['typeOfClg'].lower())
+                #newemp.save(update_fields=["active"])
+                #print(newemp.id)
+                #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
+                response = {'status': 'Success', 'responseObject': None}
+                print("Success")
+            else:
+                print("Does not exist.")
+                newclg = None
+                response = {'status': 'Failure', 'responseObject': None}
+
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+    except:
+        print("There is some problem.")
+        response = {'status': 'Failure', 'responseObject': None}
+    return JsonResponse(response, safe=False)
+
+
+@csrf_exempt
+def deleteCollege(request):
+    response = ''
+    newclg = CollegeDetails()
+
+    try:
+        if request.method == "DELETE":
+            response = 'Success'
+            #body_unicode = request.body.decode('utf-8')
+            #body_data = json.loads(body_unicode)
+            id = request.GET['id']
+            if CollegeDetails.objects.get(id=id) != None:
+                newclg=CollegeDetails.objects.get(id=id)
+                newclg.delete()
+                Courses.objects.filter(cid=id).delete()
+                response = {'status': 'Success', 'responseObject': None}
+            else:
+                #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
+                response = {'status': 'Failure', 'responseObject': None}
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+
+    except:
+        print("There's something wrong")
+        #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
+        response = {'status': 'Failure', 'responseObject': None}
     return JsonResponse(response, safe=False)
 
 @csrf_exempt
