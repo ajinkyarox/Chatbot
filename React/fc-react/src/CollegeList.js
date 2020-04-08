@@ -1,11 +1,12 @@
 import CollegeDetails from './CollegeDetails';
 import React, { Component } from 'react';
 import Popup from "reactjs-popup";
-
-
-
+import history from './history';
+import CourseList from './CourseList'
+import { Route,Redirect ,Link} from  'react-router-dom'
 
 const collegeDetails = new CollegeDetails();
+
 
 
 class CollegeList extends Component {
@@ -31,6 +32,7 @@ typeOfClg:''
         this.handleTypeChange=this.handleTypeChange.bind(this);
         this.handleUpdateSubmit=this.handleUpdateSubmit.bind(this);
         this.handleDeleteSubmit=this.handleDeleteSubmit.bind(this);
+        this.handleCourseDetails=this.handleCourseDetails.bind(this);
     }
 
 
@@ -113,6 +115,11 @@ else{
 
 // 
   }
+
+  handleCourseDetails(event,id,name){
+      
+    history.push('/CourseList?id='+id+'&name='+name)            
+}
 
 handleDeleteSubmit(event,id){
     
@@ -244,7 +251,7 @@ else{
                         {this.state.collegeDetails.map(c =>
                             <tr key={c.id}>
                                 <td>{c.id}</td>
-                                <td>{c.name}</td>
+                                <td> <button onClick={e=>this.handleCourseDetails(e,c.id,c.name)}>{c.name}</button></td>
                                 <td>{c.address}</td>
                                 <td>{c.shortForm}</td>
                                 <td>{c.admitCriteria}</td>

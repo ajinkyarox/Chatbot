@@ -1,5 +1,6 @@
 # pages/views.py
 import os
+from rest_framework import serializers
 import base64
 from django.http import HttpResponse
 from .models import EmpDetails,Attendance,LoginCredentials,CollegeDetails,Courses
@@ -17,6 +18,7 @@ from datetime import date
 import xlsxwriter
 from cryptography.fernet import Fernet
 import win32com.client as wincl
+from django.forms.models import model_to_dict
 from gtts import gTTS
 import pythoncom
 import win32com.client as wincl
@@ -166,6 +168,21 @@ def deleteCollege(request):
         #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
         response = {'status': 'Failure', 'responseObject': None}
     return JsonResponse(response, safe=False)
+
+def getCourseDetails(request):
+    id=request.GET['id']
+    data=list(Courses.objects.filter(cid=id))
+    data2=[]
+    cnt=0
+    for item in data:
+
+        temp={'id':item.id,'name':item.name}
+        data[cnt]=temp
+        cnt=cnt+1
+
+    #return HttpResponse(data, content_type="application/json")
+    return JsonResponse(data, safe=False)
+
 
 @csrf_exempt
 def updateEmployee(request):

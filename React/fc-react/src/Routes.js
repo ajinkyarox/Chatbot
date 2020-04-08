@@ -5,6 +5,7 @@ import Login from "./Login";
 import Main from "./Main";
 import EmpList from "./EmpList";
 import AttendanceList from "./AttendanceList";
+import CourseList from "./CourseList";
 
 export default class Routes extends Component {
     render() {
@@ -15,6 +16,7 @@ export default class Routes extends Component {
                     <Route path="/Main" component={Main} />
                     <Route path="/EmpList" component={EmpList} />
                     <Route path="/AttendanceList" component={AttendanceList} />
+                    <Route path="/CourseList" component={CourseList}/>
                 </Switch>
             </Router>
         )

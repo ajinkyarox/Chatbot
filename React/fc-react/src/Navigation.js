@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 const Navigation = (props) => {
     console.log(props);
     return (
-        <h1>FaceRecog</h1>
+        <h1>ChatBot</h1>
     )
 }
 
