@@ -19,7 +19,7 @@ class CourseList extends Component {
             collegeName: params.get('name').toUpperCase(),
             showPopup: false,
             name:'',
-
+            seats:'',
             courses: []
         };
         this.goBack=this.goBack.bind(this)
@@ -27,18 +27,22 @@ class CourseList extends Component {
         this.handleNameChange=this.handleNameChange.bind(this);
         this.handleUpdateSubmit=this.handleUpdateSubmit.bind(this);
         this.handleDeleteSubmit=this.handleDeleteSubmit.bind(this);
+        this.handleSeatsChange=this.handleSeatsChange.bind(this);
     }
 
     handleNameChange(event){
         this.setState({name: event.target.value }); 
     }
-
+    handleSeatsChange(event){
+        this.setState({seats: event.target.value }); 
+    }
     handleSubmit(event) {
         console.log(this.state.name)
         if(this.state.name.trim()!='' && this.state.name!=null && this.state.name!=undefined){
             var body1= JSON.stringify({
                 name: this.state.name,
-                cid:this.state.params
+                cid:this.state.params,
+                seats:this.state.seats
             })  
             console.log("POSTING"+body1)
             fetch('http://localhost:8000/addCourse', {
@@ -96,7 +100,7 @@ handleUpdateSubmit(e,Id){
         var body1= JSON.stringify({
             id:Id,
             name: this.state.name,
-            
+                seats:this.state.seats
         })  
         console.log("POSTING"+body1)
         fetch('http://localhost:8000/updateCourse', {
@@ -164,8 +168,10 @@ handleDeleteSubmit(event,id){
                                             <input type="text" value={this.state.name} onChange={(e)=>this.handleNameChange(e) } />
 
                                             <br></br>
+                                            Seats:
 <br></br>
-    
+<input type="text" value={this.state.seats} onChange={(e)=>this.handleSeatsChange(e) } />
+<br></br>
                                     <button onClick={this.handleSubmit}>Add</button>
     
                                     
@@ -181,6 +187,7 @@ handleDeleteSubmit(event,id){
                     <thead key="thead">
                         <tr><th>ID</th>
                             <th>Name</th>
+                            <th>Seats</th>
                             <th>Update</th>
                             <th>Delete</th>
                         </tr>
@@ -189,7 +196,9 @@ handleDeleteSubmit(event,id){
                     {this.state.courses.map(c =>
                             <tr key={c.id}>
                                 <td>{c.id}</td>
+
                     <td>{c.name.toUpperCase()}</td>
+                    <td>{c.seats}</td>
                     <td><Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Update Course</button>} position="left center">
                     <div>
                                                            Name:
@@ -197,6 +206,10 @@ handleDeleteSubmit(event,id){
                                             <input type="text" value={this.state.name} onChange={(e)=>this.handleNameChange(e) } />
 
                                             <br></br>
+<br></br>
+Seats:
+<br></br>
+<input type="text" value={this.state.seats} onChange={(e)=>this.handleSeatsChange(e) } />
 <br></br>
     
                                     <button onClick={e=>this.handleUpdateSubmit(e,c.id)}>Update</button>

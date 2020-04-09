@@ -32,7 +32,6 @@ class CollegeDetails(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=256)
-    totalCourses = models.IntegerField()
     admitCriteria=models.IntegerField()
     shortForm=models.CharField(max_length=256)
     fees=models.IntegerField()
@@ -43,6 +42,7 @@ class CollegeDetails(models.Model):
 class Courses(models.Model):
     id = models.AutoField(primary_key=True)
     cid=models.IntegerField()
+    seats=models.IntegerField()
     name = models.CharField(max_length=256)
     class Meta:
         db_table = "Courses"

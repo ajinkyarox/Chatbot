@@ -269,7 +269,7 @@ def getCourseDetails(request):
     cnt=0
     for item in data:
 
-        temp={'id':item.id,'name':item.name}
+        temp={'id':item.id,'name':item.name,'seats':item.seats}
         data[cnt]=temp
         cnt=cnt+1
 
@@ -844,9 +844,37 @@ def mcresponse(request):
                                         response = {'status': "Success", 'respmsg': respf,
                                                     'respvoice': voice}
                                         break
+                                elif tg['context_set'] == 'seats':
+                                    print("Seats")
+                                    courseList=list(Courses.objects.values())
+                                    courseName=''
+
+                                    if courseList!=None:
+                                        for temp1 in courseList:
 
 
+                                            if is_part(msg,temp1['name'].lower())==True:
+                                                print("Matched")
+                                                courseName=temp1['name']
+                                                print("Course Name is-"+courseName)
+                                                break
+                                        collegeName=uniqueWords3(msg,words,courseName)
+                                        print("College Name is-"+collegeName)
+                                        collegeId=None
+                                        if CollegeDetails.objects.filter(name=collegeName).first()!=None or CollegeDetails.objects.filter(shortForm=collegeName).first()!=None:
+                                            collegeId=CollegeDetails.objects.filter(shortForm=collegeName).first()
+                                        if collegeId!=None:
+                                            print("KKLLKK"+courseName)
+                                            cobj=Courses.objects.filter(cid=collegeId.id,name=courseName).first()
+                                            respf = 'The '+cobj.name+' at '+collegeId.name+' has '+str(cobj.seats)+' seats available.'
+                                        else:
+                                            respf = 'There is no college or course of requested type. Sorry.'
+                                    else:
+                                        respf = 'There is no college or course of requested type. Sorry.'
+                                    voice = getTextToSpeech(respf)
 
+                                    response = {'status': "Success", 'respmsg': respf,
+                                                'respvoice': voice}
                             else:
                                 respf = random.choice(resp)
                             voice = getTextToSpeech(respf)
@@ -960,10 +988,44 @@ def uniqueWords(msg,words):
                     and w!='fall' and w!='falls' and w!='does' and w!='offer' and w!='at' and w!='available' and w!='opt' and w!='for':
                 cnt=cnt+1
         if cnt==len(words):
-            print(w)
+
             resword= w
     print(resword)
+
     return resword
+
+def uniqueWords3(msg,words,course):
+    resword=''
+    cautionword=''
+
+    bag = [0 for _ in range(len(words))]
+    s_words = nltk.word_tokenize(msg)
+    s_words = [stemmer.stem(word.lower()) for word in s_words]
+    allwords=msg.lower().split(" ")
+
+    for w in allwords:
+        cnt=0
+        for s in words:
+            if w!='a' and w!='of' and w!='bachelors' and w!="bachelor's" and w!='and' and w!='engineering' and w!='research' and w!='college' and w!=s and w!='institute'\
+                    and w!='technology' and w!='admission' and w!='criteria' and w!='what' and w!='for' and w!='regarding' and w!='fee'\
+                    and w!='fees' and w!='information' and w!='please' and w!='give'  and w!='admitted' and w!='percentage'\
+                    and w!='required' and w!='in' and w!='college' and w!=' ' and w.strip()!='' and w!='college' and w!='colleges'\
+                    and w!='aegis' and w!='me' and w!='you' and w!='share' and w!='all' and w!='list' and w!='of' and w!='the'\
+                    and w!='fall' and w!='falls' and w!='does' and w!='offer' and w!='at' and w!='available' and w!='opt' and w!='for'\
+                    and w!='seats' and w!='want' and w!='wanted' and w!='course' and w!='number' and w!='how' and w!='offer' and w!='offered'\
+                    and w!='offers':
+                if is_part(course.lower(),w)==False:
+
+                    cnt = cnt + 1
+
+
+        if cnt==len(words):
+
+            resword= w
+
+
+    return resword
+
 
 def uniqueWords2(msg,words):
     resword=''

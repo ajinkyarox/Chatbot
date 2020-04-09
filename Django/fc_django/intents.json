@@ -39,6 +39,13 @@
          ,"could you share with me the list of all colleges"],
          "responses": "",
       "context_set": "type"
+        },
+    {"tag": "information5",
+         "patterns": ["could you share with me the information related to number of seats for","could you tell me number of seats available for","please tell me the number of seats available for course at",
+         "give me the information related to number of seats available for course at","I want to know number of seats available for at",
+         "I wanted to know number of seats available for at","How many seats are offered by for"],
+         "responses": "",
+      "context_set": "seats"
         }
    ]
 }
