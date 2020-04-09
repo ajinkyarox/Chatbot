@@ -1,6 +1,6 @@
 # pages/urls.py
 from django.urls import path
-from .views import addCollege,getCourseDetails,deleteCollege,updateCollege,getEmpDetails,getCollegeDetails,addEmployee,updateEmployee,deleteEmployee,savePhoto,markAttendance,getAttendance,getMonthlyReport,addLoginCredentials,mcresponse,login,getTextToSpeech
+from .views import addCollege,getCourseDetails,addCourse,deleteCourse,updateCourse,deleteCollege,updateCollege,getEmpDetails,getCollegeDetails,addEmployee,updateEmployee,deleteEmployee,savePhoto,markAttendance,getAttendance,getMonthlyReport,addLoginCredentials,mcresponse,login,getTextToSpeech
 from facerecog import views
 
 urlpatterns = [
@@ -21,6 +21,9 @@ urlpatterns = [
     path('addCollege', addCollege, name='addCollege'),
     path('updateCollege',updateCollege,name='updateCollege'),
     path('deleteCollege',deleteCollege),
-    path('getCourseDetails',getCourseDetails)
+    path('getCourseDetails',getCourseDetails),
+    path('addCourse',addCourse,name='addCourse'),
+    path('updateCourse',updateCourse,name='updateCourse'),
+    path('deleteCourse',deleteCourse,name='deleteCourse')
 ]
 

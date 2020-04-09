@@ -251,12 +251,12 @@ else{
                         {this.state.collegeDetails.map(c =>
                             <tr key={c.id}>
                                 <td>{c.id}</td>
-                                <td> <button onClick={e=>this.handleCourseDetails(e,c.id,c.name)}>{c.name}</button></td>
-                                <td>{c.address}</td>
+                                <td> <button onClick={e=>this.handleCourseDetails(e,c.id,c.name)}>{c.name.toUpperCase()}</button></td>
+                                <td>{c.address.toUpperCase()}</td>
                                 <td>{c.shortForm}</td>
                                 <td>{c.admitCriteria}</td>
                                 <td>{c.fees}</td>
-                                <td>{c.typeOfClg}</td>
+                                <td>{c.typeOfClg.toUpperCase()}</td>
                                 <td><Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Update College</button>} position="left center">
                     <div>
                                                            Name:
@@ -293,7 +293,7 @@ else{
                     
                                     </div>
                 </Popup></td>
-                                <td><Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Delete College</button>} position="left center">
+                                <td><Popup trigger={<button onClick={this.togglePopup.bind(this)}>Delete College</button>} position="left center">
                     <div>
                                                            
     

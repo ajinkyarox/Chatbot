@@ -107,6 +107,71 @@ def addCollege(request):
     return JsonResponse(response, safe=False)
 
 @csrf_exempt
+def addCourse(request):
+    response = {'status': 'Failure', 'responseObject': None}
+    newclg = Courses()
+    print("OOO")
+    if request.method == "POST":
+        print("MMM")
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
+
+
+        newclg.name=body_data['name'].lower()
+        newclg.cid=body_data['cid']
+        print(newclg)
+        if Courses.objects.filter(name=body_data['name'],cid=body_data['cid']).first()!=None:
+            print("Duplicate")
+            newclg=None
+            response = {'status': 'Failure', 'responseObject': newclg}
+        elif body_data['name'].strip()!="" and body_data['cid'].strip()!="":
+
+            newclg.save()
+            newclg=Courses.objects.filter(name=body_data['name'],cid=body_data['cid']).first()
+            print(newclg.id)
+
+            response={'status':'Success','responseObject':{'id':newclg.id,'name':newclg.name,'cid':newclg.cid}}
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+    else:
+        response={'status':'Failure','responseObject':None}
+    return JsonResponse(response, safe=False)
+
+
+@csrf_exempt
+def updateCourse(request):
+    response = ''
+    newclg = Courses()
+    try:
+        if request.method == "PUT":
+            response = 'Success'
+            body_unicode = request.body.decode('utf-8')
+            body_data = json.loads(body_unicode)
+
+            print("KKK")
+            if Courses.objects.get(id=body_data['id']) != None and body_data['name'].strip()!="":
+                #newemp.firstname = body_data['firstname']
+                #newemp.lastname = body_data['lastname']
+                print("LLL")
+                newclg=Courses.objects.filter(id=body_data['id']).update(name=body_data['name'].lower())
+                #newemp.save(update_fields=["active"])
+                #print(newemp.id)
+                #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
+                response = {'status': 'Success', 'responseObject': None}
+                print("Success")
+            else:
+                print("Does not exist.")
+                newclg = None
+                response = {'status': 'Failure', 'responseObject': None}
+
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+    except:
+        print("There is some problem.")
+        response = {'status': 'Failure', 'responseObject': None}
+    return JsonResponse(response, safe=False)
+
+@csrf_exempt
 def updateCollege(request):
     response = ''
     newclg = CollegeDetails()
@@ -137,6 +202,34 @@ def updateCollege(request):
             response = {'status': 'Failure', 'responseObject': None}
     except:
         print("There is some problem.")
+        response = {'status': 'Failure', 'responseObject': None}
+    return JsonResponse(response, safe=False)
+
+@csrf_exempt
+def deleteCourse(request):
+    response = ''
+    newclg = Courses()
+
+    try:
+        if request.method == "DELETE":
+            response = 'Success'
+            #body_unicode = request.body.decode('utf-8')
+            #body_data = json.loads(body_unicode)
+            id = request.GET['id']
+            if Courses.objects.get(id=id) != None:
+                newclg=Courses.objects.get(id=id)
+                newclg.delete()
+
+                response = {'status': 'Success', 'responseObject': None}
+            else:
+                #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
+                response = {'status': 'Failure', 'responseObject': None}
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+
+    except:
+        print("There's something wrong")
+        #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
         response = {'status': 'Failure', 'responseObject': None}
     return JsonResponse(response, safe=False)
 
@@ -172,7 +265,7 @@ def deleteCollege(request):
 def getCourseDetails(request):
     id=request.GET['id']
     data=list(Courses.objects.filter(cid=id))
-    data2=[]
+
     cnt=0
     for item in data:
 
