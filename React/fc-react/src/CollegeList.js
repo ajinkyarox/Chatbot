@@ -33,6 +33,7 @@ typeOfClg:''
         this.handleUpdateSubmit=this.handleUpdateSubmit.bind(this);
         this.handleDeleteSubmit=this.handleDeleteSubmit.bind(this);
         this.handleCourseDetails=this.handleCourseDetails.bind(this);
+        this.handleFeeDetails=this.handleFeeDetails.bind(this);
     }
 
 
@@ -120,7 +121,9 @@ else{
       
     history.push('/CourseList?id='+id+'&name='+name)            
 }
-
+handleFeeDetails(event,id,name){
+    history.push('/FeeList?id='+id+'&name='+name)
+}
 handleDeleteSubmit(event,id){
     
 
@@ -255,7 +258,7 @@ else{
                                 <td>{c.address.toUpperCase()}</td>
                                 <td>{c.shortForm}</td>
                                 <td>{c.admitCriteria}</td>
-                                <td>{c.fees}</td>
+                                <td><button onClick={e=>this.handleFeeDetails(e,c.id,c.name)}>Fee Details</button></td>
                                 <td>{c.typeOfClg.toUpperCase()}</td>
                                 <td><Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Update College</button>} position="left center">
                     <div>

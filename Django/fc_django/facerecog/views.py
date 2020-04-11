@@ -3,7 +3,7 @@ import os
 from rest_framework import serializers
 import base64
 from django.http import HttpResponse
-from .models import EmpDetails,Attendance,LoginCredentials,CollegeDetails,Courses
+from .models import EmpDetails,Attendance,LoginCredentials,CollegeDetails,Courses,Fees
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict
@@ -153,7 +153,7 @@ def updateCourse(request):
                 #newemp.firstname = body_data['firstname']
                 #newemp.lastname = body_data['lastname']
                 print("LLL")
-                newclg=Courses.objects.filter(id=body_data['id']).update(name=body_data['name'].lower())
+                newclg=Courses.objects.filter(id=body_data['id']).update(name=body_data['name'].lower(),seats=body_data['seats'])
                 #newemp.save(update_fields=["active"])
                 #print(newemp.id)
                 #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
@@ -270,6 +270,20 @@ def getCourseDetails(request):
     for item in data:
 
         temp={'id':item.id,'name':item.name,'seats':item.seats}
+        data[cnt]=temp
+        cnt=cnt+1
+
+    #return HttpResponse(data, content_type="application/json")
+    return JsonResponse(data, safe=False)
+
+def getFeeDetails(request):
+    id=request.GET['cid']
+    data=list(Fees.objects.filter(cid=id))
+
+    cnt=0
+    for item in data:
+
+        temp={'id':item.id,'openCategory':item.openCategory,'obc':item.obc,'sbc':item.sbc,'sc':item.sc,'st':item.st}
         data[cnt]=temp
         cnt=cnt+1
 
@@ -866,7 +880,7 @@ def mcresponse(request):
                                         if collegeId!=None:
                                             print("KKLLKK"+courseName)
                                             cobj=Courses.objects.filter(cid=collegeId.id,name=courseName).first()
-                                            respf = 'The '+cobj.name+' at '+collegeId.name+' has '+str(cobj.seats)+' seats available.'
+                                            respf = 'The '+cobj.name+' course at '+collegeId.name+' has '+str(cobj.seats)+' seats available.'
                                         else:
                                             respf = 'There is no college or course of requested type. Sorry.'
                                     else:

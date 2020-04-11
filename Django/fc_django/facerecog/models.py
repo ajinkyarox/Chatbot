@@ -46,3 +46,14 @@ class Courses(models.Model):
     name = models.CharField(max_length=256)
     class Meta:
         db_table = "Courses"
+
+class Fees(models.Model):
+    id=models.AutoField(primary_key=True)
+    cid = models.IntegerField()
+    openCategory=models.IntegerField()
+    obc=models.IntegerField()
+    sbc=models.IntegerField()
+    sc=models.IntegerField()
+    st=models.IntegerField()
+    class Meta:
+        db_table = "fees"
