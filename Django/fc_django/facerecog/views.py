@@ -290,38 +290,6 @@ def getFeeDetails(request):
     #return HttpResponse(data, content_type="application/json")
     return JsonResponse(data, safe=False)
 
-
-@csrf_exempt
-def addCourse(request):
-    response = {'status': 'Failure', 'responseObject': None}
-    newclg = Courses()
-    print("OOO")
-    if request.method == "POST":
-        print("MMM")
-        body_unicode = request.body.decode('utf-8')
-        body_data = json.loads(body_unicode)
-
-
-        newclg.name=body_data['name'].lower()
-        newclg.cid=body_data['cid']
-        print(newclg)
-        if Courses.objects.filter(name=body_data['name'],cid=body_data['cid']).first()!=None:
-            print("Duplicate")
-            newclg=None
-            response = {'status': 'Failure', 'responseObject': newclg}
-        elif body_data['name'].strip()!="" and body_data['cid'].strip()!="":
-
-            newclg.save()
-            newclg=Courses.objects.filter(name=body_data['name'],cid=body_data['cid']).first()
-            print(newclg.id)
-
-            response={'status':'Success','responseObject':{'id':newclg.id,'name':newclg.name,'cid':newclg.cid}}
-        else:
-            response = {'status': 'Failure', 'responseObject': None}
-    else:
-        response={'status':'Failure','responseObject':None}
-    return JsonResponse(response, safe=False)
-
 @csrf_exempt
 def addFeeDetails(request):
     response = {'status': 'Failure', 'responseObject': None}
