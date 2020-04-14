@@ -249,6 +249,7 @@ def deleteCollege(request):
                 newclg=CollegeDetails.objects.get(id=id)
                 newclg.delete()
                 Courses.objects.filter(cid=id).delete()
+                Fees.objects.filter(cid=id).delete()
                 response = {'status': 'Success', 'responseObject': None}
             else:
                 #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
