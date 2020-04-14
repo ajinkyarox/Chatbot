@@ -292,6 +292,106 @@ def getFeeDetails(request):
 
 
 @csrf_exempt
+def addCourse(request):
+    response = {'status': 'Failure', 'responseObject': None}
+    newclg = Courses()
+    print("OOO")
+    if request.method == "POST":
+        print("MMM")
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
+
+
+        newclg.name=body_data['name'].lower()
+        newclg.cid=body_data['cid']
+        print(newclg)
+        if Courses.objects.filter(name=body_data['name'],cid=body_data['cid']).first()!=None:
+            print("Duplicate")
+            newclg=None
+            response = {'status': 'Failure', 'responseObject': newclg}
+        elif body_data['name'].strip()!="" and body_data['cid'].strip()!="":
+
+            newclg.save()
+            newclg=Courses.objects.filter(name=body_data['name'],cid=body_data['cid']).first()
+            print(newclg.id)
+
+            response={'status':'Success','responseObject':{'id':newclg.id,'name':newclg.name,'cid':newclg.cid}}
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+    else:
+        response={'status':'Failure','responseObject':None}
+    return JsonResponse(response, safe=False)
+
+@csrf_exempt
+def addFeeDetails(request):
+    response = {'status': 'Failure', 'responseObject': None}
+    newfees = Fees()
+    print("OOO")
+    if request.method == "POST":
+        print("MMM")
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
+
+        newfees.cid=body_data['cid']
+        newfees.openCategory=body_data['openCategory']
+        newfees.obc=body_data['obc']
+        newfees.sbc=body_data['sbc']
+        newfees.sc=body_data['sc']
+        newfees.st=body_data['st']
+        print(newfees)
+        if Fees.objects.filter(cid=body_data['cid']).first()!=None:
+            print("Duplicate")
+            newclg=None
+            response = {'status': 'Failure', 'responseObject': newfees}
+        elif body_data['cid'].strip()!="":
+
+            newfees.save()
+            newfees=Fees.objects.filter(cid=body_data['cid']).first()
+            print(newfees.id)
+
+            response={'status':'Success','responseObject':{'id':newfees.id,'openCategory':newfees.openCategory
+                                                           ,'obc':newfees.obc,'sbc':newfees.sbc,'sc':newfees.sc,'st':newfees.st}}
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+    else:
+        response={'status':'Failure','responseObject':None}
+    return JsonResponse(response, safe=False)
+
+
+@csrf_exempt
+def updateFeeDetails(request):
+    response = ''
+    newfees = Fees()
+    try:
+        if request.method == "PUT":
+            response = 'Success'
+            body_unicode = request.body.decode('utf-8')
+            body_data = json.loads(body_unicode)
+
+
+            if Fees.objects.get(id=body_data['id']) != None:
+                #newemp.firstname = body_data['firstname']
+                #newemp.lastname = body_data['lastname']
+                newfees=Fees.objects.filter(id=body_data['id']).update(openCategory=body_data['openCategory'],obc=body_data['obc'],
+                                                                       sbc=body_data['sbc'],sc=body_data['sc'],st=body_data['st'])
+                #newemp.save(update_fields=["active"])
+                #print(newemp.id)
+                #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}
+                response = {'status': 'Success', 'responseObject': None}
+                print("Success")
+            else:
+                print("Does not exist.")
+                newfees = None
+                response = {'status': 'Failure', 'responseObject': None}
+
+        else:
+            response = {'status': 'Failure', 'responseObject': None}
+    except:
+        print("There is some problem.")
+        response = {'status': 'Failure', 'responseObject': None}
+    return JsonResponse(response, safe=False)
+
+@csrf_exempt
 def updateEmployee(request):
     response = ''
     newemp = EmpDetails()
@@ -791,35 +891,40 @@ def mcresponse(request):
 
                                 elif tg['context_set']=='fees':
                                     print('FEES')
-                                    cname = uniqueWords(msg, words).lower()
-                                    college = None
-                                    try:
-                                        print(cname)
-                                        college=CollegeDetails.objects.filter(name=cname).first()
-                                        if college==None:
-                                            college=CollegeDetails.objects.filter(shortForm=cname).first()
-                                    except Exception as e:
-                                        print(str(e))
-                                    print(college)
+                                    cList=list(CollegeDetails.objects.values())
 
-
-
-                                    if college!=None:
-                                        print("Is Part for fees "+college.name + ' '+college.fees)
-                                        respf = 'The fee for '+college.name+' is '+college.fees+' Rupees per year.'
-                                        print(respf)
-                                        voice = getTextToSpeech(respf)
-                                        response = {'status': "Success", 'respmsg': respf,
-                                                    'respvoice': voice}
-                                        break
-
+                                    feesRequired=None
+                                    collegeId=0
+                                    collegeName=''
+                                    for it in cList:
+                                        if is_part(msg.lower(),it['name'].lower())==True or is_part(msg.lower(),it['shortForm']):
+                                            collegeName=it['name']
+                                            collegeId=it['id']
+                                            feesRequired=Fees.objects.filter(cid=collegeId).first()
+                                            print(feesRequired)
+                                            break
+                                    if feesRequired!=None:
+                                        if is_part(msg.lower(),'open')==True:
+                                            respf = 'The fees for ' + collegeName + ' for ' + 'Open' + ' category is '+str(feesRequired.openCategory)+' Rupees.'
+                                        elif is_part(msg.lower(),'obc')==True:
+                                            respf = 'The fees for ' + collegeName + ' for ' + 'OBC' + ' category is ' + str(feesRequired.obc)+' Rupees.'
+                                        elif is_part(msg.lower(),'sbc'):
+                                            respf = 'The fees for ' + collegeName + ' for ' + 'SBC' + ' category is ' + str(feesRequired.sbc)+' Rupees.'
+                                        elif is_part(msg.lower(),'sc'):
+                                            respf = 'The fees for ' + collegeName + ' for ' +'SC' + ' category is ' + str(feesRequired.sc)+' Rupees.'
+                                        elif is_part(msg.lower(),'st'):
+                                            respf = 'The fees for ' + collegeName + ' for ' + 'ST' + ' category is ' + str(feesRequired.st)+' Rupees.'
+                                        else:
+                                            respf = 'The requested college or category is not available. Sorry'
                                     else:
-                                        voice = getTextToSpeech(
-                                            "Requested college details not found in the database. Sorry.")
-                                        respf = "Requested college details not found in the database. Sorry."
-                                        response = {'status': "Success", 'respmsg': respf,
-                                                    'respvoice': voice}
-                                        break
+                                        respf = 'The requested college, category or fee detail is not available. Sorry.'
+                                    voice = getTextToSpeech(respf)
+                                    response = {'status': "Success", 'respmsg': respf,
+                                                'respvoice': voice}
+                                    break
+
+
+
                                 elif tg['context_set']=='type':
                                     print('TYPE')
                                     cname = uniqueWords2(msg, words).lower()

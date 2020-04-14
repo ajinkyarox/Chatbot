@@ -18,34 +18,57 @@ class FeeList extends Component {
             params: foo,
             collegeName: params.get('name').toUpperCase(),
             showPopup: false,
+            openCategory:0,
+            obc:0,
+            sbc:0,
+            sc:0,
+            st:0,
             name:'',
             seats:'',
             fees: []
         };
         this.goBack=this.goBack.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleNameChange=this.handleNameChange.bind(this);
-        this.handleUpdateSubmit=this.handleUpdateSubmit.bind(this);
-        this.handleDeleteSubmit=this.handleDeleteSubmit.bind(this);
-        this.handleSeatsChange=this.handleSeatsChange.bind(this);
+        this.handleOpenCategoryChange=this.handleOpenCategoryChange.bind(this);
+        this.handleOBCChange=this.handleOBCChange.bind(this);
+        this.handleSBCChange=this.handleSBCChange.bind(this);
+        this.handleSCChange=this.handleSCChange.bind(this);
+        this.handleSTChange=this.handleSTChange.bind(this);
     }
 
-    handleNameChange(event){
-        this.setState({name: event.target.value }); 
+    handleOpenCategoryChange(event){
+        this.setState({openCategory: event.target.value }); 
     }
-    handleSeatsChange(event){
-        this.setState({seats: event.target.value }); 
+    handleOBCChange(event){
+        this.setState({obc: event.target.value }); 
     }
+    handleSBCChange(event){
+        this.setState({sbc:event.target.value})
+    }
+    handleSCChange(event){
+        this.setState({sc:event.target.value})
+    }
+    handleSTChange(event){
+        this.setState({st:event.target.value})
+    }
+    
     handleSubmit(event) {
-        console.log(this.state.name)
-        if(this.state.name.trim()!='' && this.state.name!=null && this.state.name!=undefined){
+       if(this.state.fees.length==0){
+        if(this.state.openCategory!==0 && this.state.openCategory!==null && this.state.openCategory!==undefined &&
+            this.state.obc!==0 && this.state.obc!==null && this.state.obc!==undefined &&
+            this.state.sbc!==0 && this.state.sbc!==null && this.state.sbc!==undefined && 
+            this.state.sc!==0 && this.state.sc!==null && this.state.sc!==undefined &&
+            this.state.st!==0 && this.state.st!==null && this.state.st!==undefined){
             var body1= JSON.stringify({
-                name: this.state.name,
                 cid:this.state.params,
-                seats:this.state.seats
+                openCategory: this.state.openCategory,
+                    obc:this.state.obc,
+                    sbc:this.state.sbc,
+                    sc:this.state.sc,
+                    st:this.state.st
             })  
             console.log("POSTING"+body1)
-            fetch('http://localhost:8000/addCourse', {
+            fetch('http://localhost:8000/addFeeDetails', {
           method: 'POST',
           body: body1  
         }).then((response) => {
@@ -63,7 +86,11 @@ class FeeList extends Component {
         }
     else{
         alert("Please enter all the values")
-    }   
+    }
+       }else{
+           alert("Fee details already added.")
+       }
+       
     
     // 
       }
@@ -96,14 +123,21 @@ togglePopup() {
 }
 handleUpdateSubmit(e,Id){
     console.log(this.state.name+" "+Id)
-    if(this.state.name.trim()!='' && this.state.name!=null && this.state.name!=undefined){
+    if(this.state.openCategory!==0 && this.state.openCategory!==null && this.state.openCategory!==undefined &&
+        this.state.obc!==0 && this.state.obc!==null && this.state.obc!==undefined &&
+        this.state.sbc!==0 && this.state.sbc!==null && this.state.sbc!==undefined && 
+        this.state.sc!==0 && this.state.sc!==null && this.state.sc!==undefined &&
+        this.state.st!==0 && this.state.st!==null && this.state.st!==undefined){
         var body1= JSON.stringify({
             id:Id,
-            name: this.state.name,
-                seats:this.state.seats
+            openCategory: this.state.openCategory,
+                obc:this.state.obc,
+                sbc:this.state.sbc,
+                sc:this.state.sc,
+                st:this.state.st
         })  
         console.log("POSTING"+body1)
-        fetch('http://localhost:8000/updateCourse', {
+        fetch('http://localhost:8000/updateFeeDetails', {
       method: 'PUT',
       body: body1  
     }).then((response) => {
@@ -161,18 +195,38 @@ handleDeleteSubmit(event,id){
                 <button onClick={this.goBack}>Back</button>
                 </div>
                 <br></br>
-                <Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Add Course</button>} position="left center">
-                    <div>
-                                                           Name:
+                <Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Add Fee Details</button>} position="left center">
+                <div>
+                                                           Open Category:
                                                            <br></br>
-                                            <input type="text" value={this.state.name} onChange={(e)=>this.handleNameChange(e) } />
+                                            <input type="number" value={this.state.openCategory} onChange={(e)=>this.handleOpenCategoryChange(e) } />
 
                                             <br></br>
-                                            Seats:
+                                            OBC Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.obc} onChange={(e)=>this.handleOBCChange(e) } />
+
+                                            <br></br>
+                                            SBC Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.sbc} onChange={(e)=>this.handleSBCChange(e) } />
+
+                                            <br></br>
+                                            SC Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.sc} onChange={(e)=>this.handleSCChange(e) } />
+
+                                            <br></br>
+                                            ST Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.st} onChange={(e)=>this.handleSTChange(e) } />
+
+                                            <br></br>
+
 <br></br>
-<input type="text" value={this.state.seats} onChange={(e)=>this.handleSeatsChange(e) } />
-<br></br>
-                                    <button onClick={this.handleSubmit}>Add</button>
+
+    
+                                    <button onClick={e=>this.handleSubmit(e)}>Add</button>
     
                                     
     
@@ -204,18 +258,36 @@ handleDeleteSubmit(event,id){
                     <td>{c.sbc}</td>
                     <td>{c.sc}</td>
                     <td>{c.st}</td>
-                    <td><Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Update Course</button>} position="left center">
+                    <td><Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Update Fee Details</button>} position="left center">
                     <div>
-                                                           Name:
+                                                           Open Category:
                                                            <br></br>
-                                            <input type="text" value={this.state.name} onChange={(e)=>this.handleNameChange(e) } />
+                                            <input type="number" value={this.state.openCategory} onChange={(e)=>this.handleOpenCategoryChange(e) } />
 
                                             <br></br>
+                                            OBC Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.obc} onChange={(e)=>this.handleOBCChange(e) } />
+
+                                            <br></br>
+                                            SBC Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.sbc} onChange={(e)=>this.handleSBCChange(e) } />
+
+                                            <br></br>
+                                            SC Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.sc} onChange={(e)=>this.handleSCChange(e) } />
+
+                                            <br></br>
+                                            ST Category:
+                                                           <br></br>
+                                            <input type="number" value={this.state.st} onChange={(e)=>this.handleSTChange(e) } />
+
+                                            <br></br>
+
 <br></br>
-Seats:
-<br></br>
-<input type="text" value={this.state.seats} onChange={(e)=>this.handleSeatsChange(e) } />
-<br></br>
+
     
                                     <button onClick={e=>this.handleUpdateSubmit(e,c.id)}>Update</button>
     

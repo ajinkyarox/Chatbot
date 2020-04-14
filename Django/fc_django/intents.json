@@ -27,10 +27,10 @@
       "context_set": "admissionCriteria"
         },
     {"tag": "information3",
-         "patterns": ["What is the fees for college", "I want to know about total fees for college","Please tell me about the fees for college"
-         ,"Could you give information about the fees for college","What is the fee for single year for college",
-         "I would like to know about the fee for single year for college","I want to know the fee for single year for college",
-         "Could you give me information about the fee for one year at college","Please give me information regarding fee for college"],
+         "patterns": ["What is the fees for college for category", "I want to know about total fees for college for category","Please tell me about the fees for college for category"
+         ,"Could you give information about the fees for college for category","What is the fee for single year for category at college",
+         "I would like to know about the fee for single year for category at college","I want to know the fee for single year for college for category",
+         "Could you give me information about the fee for one year at college for category","Please give me information regarding fee for college for category"],
          "responses": "",
       "context_set": "fees"
         },
