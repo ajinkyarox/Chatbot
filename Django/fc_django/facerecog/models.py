@@ -34,7 +34,6 @@ class CollegeDetails(models.Model):
     address = models.CharField(max_length=256)
     admitCriteria=models.IntegerField()
     shortForm=models.CharField(max_length=256)
-    fees=models.IntegerField()
     typeOfClg=models.CharField(max_length=256)
     class Meta:
         db_table = "CollegeDetails"

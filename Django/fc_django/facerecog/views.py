@@ -86,7 +86,7 @@ def addCollege(request):
         newclg.name=body_data['name'].lower()
         newclg.address = body_data['address'].lower()
         newclg.admitCriteria=body_data['admitCriteria']
-        newclg.fees=body_data['fees']
+
         newclg.shortForm=body_data['shortForm'].lower()
         newclg.typeOfClg=body_data['typeOfClg'].lower()
         if CollegeDetails.objects.filter(name=body_data['name'],shortForm=body_data['shortForm']).first()!=None:
@@ -186,8 +186,7 @@ def updateCollege(request):
                 #newemp.firstname = body_data['firstname']
                 #newemp.lastname = body_data['lastname']
                 newclg=CollegeDetails.objects.filter(id=body_data['id']).update(name=body_data['name'].lower(),address=body_data['address'].lower(),
-                                                                                admitCriteria=body_data['admitCriteria'].lower(),shortForm=body_data['shortForm'].lower(),
-                                                                                fees=body_data['fees'],typeOfClg=body_data['typeOfClg'].lower())
+                                                                                admitCriteria=body_data['admitCriteria'].lower(),shortForm=body_data['shortForm'].lower(),typeOfClg=body_data['typeOfClg'].lower())
                 #newemp.save(update_fields=["active"])
                 #print(newemp.id)
                 #newemp = {'id': newemp.id, 'firstname': newemp.firstname, 'lastname': newemp.lastname}

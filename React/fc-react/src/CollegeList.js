@@ -214,10 +214,7 @@ else{
                                     <br></br>
                                     <input type="text" value={this.state.admitCriteria} onChange={(e)=>this.handleAdmitCriteriaChange(e) } />
                                     <br></br>
-                                    Fees:
-                                    <br></br>
-                                    <input type="text" value={this.state.fees}  onChange={(e)=>this.handleFeesChange(e) } />
-                                    <br></br>
+                                   
                                     Type:
                                     <br></br>
                                     <input type="text" value={this.state.typeOfClg} onChange={(e)=>this.handleTypeChange(e) } />
@@ -277,10 +274,6 @@ else{
                                     Admit Criteria:
                                     <br></br>
                                     <input type="text" value={this.state.admitCriteria} onChange={(e)=>this.handleAdmitCriteriaChange(e) } />
-                                    <br></br>
-                                    Fees:
-                                    <br></br>
-                                    <input type="text" value={this.state.fees}  onChange={(e)=>this.handleFeesChange(e) } />
                                     <br></br>
                                     Type:
                                     <br></br>
