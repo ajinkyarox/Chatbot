@@ -22,13 +22,13 @@ function App() {
   
   return (
     <div align="center">
-      <link rel="stylesheet" href="bootstrap.min.css">
+      
       <h1>Chatbot</h1>
       <br></br><br></br><br></br>
       <BrowserRouter>
        <LoginPage/>
       </BrowserRouter>
-      </link>
+      
 
     </div>
   );

@@ -75,6 +75,7 @@ handleFeesChange(event){
 }
 handleTypeChange(event){
     this.setState({typeOfClg: event.target.value }); 
+    
 }
 
 handleSubmit(event) {
@@ -196,7 +197,7 @@ else{
         return (
             <div align="center">
                 <br></br>
-                <Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Add Employee</button>} position="left center">
+                <Popup   trigger={<button onClick={this.togglePopup.bind(this)}>Add College</button>} position="left center">
                     <div>
                                                            Name:
                                                            <br></br>
@@ -217,7 +218,16 @@ else{
                                    
                                     Type:
                                     <br></br>
-                                    <input type="text" value={this.state.typeOfClg} onChange={(e)=>this.handleTypeChange(e) } />
+                                    <select name="Type of College" value={this.state.typeOfClg} onChange={e=>this.handleTypeChange(e)}>
+    
+    
+    <option value="science">SCIENCE</option>
+    <option value="engineering">ENGINEERING</option>
+    <option value="law">LAW</option>
+    <option value="commerce">COMMERCE</option>
+    <option value="arts">ARTS</option>
+   
+</select>
     
 <br></br>
 <br></br>
@@ -277,7 +287,16 @@ else{
                                     <br></br>
                                     Type:
                                     <br></br>
-                                    <input type="text" value={this.state.typeOfClg} onChange={(e)=>this.handleTypeChange(e) } />
+                                    <select name="Type of College" value={this.state.typeOfClg} onChange={e=>this.handleTypeChange(e)}>
+    
+    
+     <option value="science">SCIENCE</option>
+     <option value="engineering">ENGINEERING</option>
+     <option value="law">LAW</option>
+     <option value="commerce">COMMERCE</option>
+     <option value="arts">ARTS</option>
+    
+</select>
     
 <br></br>
 <br></br>
