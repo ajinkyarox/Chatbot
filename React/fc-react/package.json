@@ -31,7 +31,7 @@
     "reactjs-dropdown-component": "^1.0.6",
     "reactjs-popup": "^1.5.0",
     "semantic-ui-react": "^0.88.2",
-    "xlsx": "^0.15.4"
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "start": "react-scripts start",
